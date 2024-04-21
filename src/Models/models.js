@@ -2,16 +2,16 @@ const mongoose = require('mongoose')
 // const module = require('module')
 
 const UserSchema = new mongoose.Schema({
-    name:{type:String},
-    password :{type:String},
+    fname:{type:String},
+    lname:{type:String},
     email:{type:String},
     mobile:{type:String},
-    location:{type:String}
+    password :{type:String}
 })
 
 const LoRaSchema = new mongoose.Schema({
     userId:{type:String},
-    NoOfReq:{type:Number    }
+    NoOfReq:{type:Number}
 })
 
 const RequestSchema = new mongoose.Schema({

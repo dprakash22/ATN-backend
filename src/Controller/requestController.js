@@ -33,7 +33,7 @@ const requestController = async (req, res) => {
         const needHelp = await Request.create({
             data: req.body.data,
             status: "Not Completed",
-            userID: req.body.userID,
+            loraID: req.body.loraID,
         });
 
         console.log(needHelp);

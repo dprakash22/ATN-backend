@@ -18,7 +18,7 @@ const LoRaSchema = new mongoose.Schema({
 const RequestSchema = new mongoose.Schema({
     data: { type: Object },
     status: { type: String },
-    userID: { type: String },
+    loraID: { type: String },
     createdAt: { type: Date, default: Date.now },
 });
 

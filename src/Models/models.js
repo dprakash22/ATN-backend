@@ -13,6 +13,7 @@ const UserSchema = new mongoose.Schema({
 const LoRaSchema = new mongoose.Schema({
     userId: { type: String },
     NoOfReq: { type: Number },
+    city: { type: String },
 });
 
 const RequestSchema = new mongoose.Schema({

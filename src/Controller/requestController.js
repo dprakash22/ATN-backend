@@ -49,4 +49,8 @@ const requestController = async (req, res) => {
     }
 };
 
+const requestOutput = async (req, res) => {
+    console.log("Hello");
+};
+
 module.exports = { requestController };

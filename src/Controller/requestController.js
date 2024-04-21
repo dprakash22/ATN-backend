@@ -13,7 +13,7 @@ const updateRequestStatus = async () => {
         });
 
         for (const request of requestsToUpdate) {
-            request.status = "Expired..";
+            request.status = "Expired";
             await request.save();
         }
 
@@ -51,7 +51,21 @@ const requestController = async (req, res) => {
 
 const requestOutput = async (req, res) => {
     try {
-    } catch (e) {}
+        console.log("Enter into try block of requestOutput");
+
+        const requestPage = await Request.find({ status: { $ne: "Expired" } });
+
+        res.status(200).json({
+            Message: "Successfully the required data has been displayed",
+            data: requestPage,
+        });
+    } catch (e) {
+        console.log("Entered into error block ......");
+        res.status(500).json({
+            Message: "Error occured",
+            Error: e,
+        });
+    }
 };
 
-module.exports = { requestController };
+module.exports = { requestController, requestOutput };

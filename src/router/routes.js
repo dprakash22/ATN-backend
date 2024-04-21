@@ -1,10 +1,12 @@
-const {userController,loginpage} =require("../Controller/userController");
+const { userController, loginpage } = require("../Controller/userController");
+const { requestController } = require("../Controller/requestController");
 const express = require("express");
 
-const userControllerapp = express.Router();
+const controllerApp = express.Router();
 
+controllerApp.post("/detail", userController);
+controllerApp.post("/login", loginpage);
 
-userControllerapp.post('/detail',userController);
-userControllerapp.post('/login',loginpage)
+controllerApp.post("/newRequesting", requestController);
 
-module.exports={userControllerapp}
+module.exports = { controllerApp };

@@ -3,24 +3,21 @@ const cors = require("cors");
 const express = require("express");
 const { User, LoRa, Reqest } = require("./Models/models");
 const mongoose = require("mongoose");
-const {userControllerapp} = require("./router/routes.js");
+const { controllerApp } = require("./router/routes.js");
 
 const app = express();
 app.use(bodyParser.json());
 
-
 app.use(cors());
-app.use(express.json())
-app.use('/user', userControllerapp);
-
-
+app.use(express.json());
+app.use("/user", controllerApp);
 
 app.get("/try_msg", async (req, res) => {
     try {
         res.status(200).json({
             message: "Verified",
         });
-        console.log("joi")
+        console.log("joi");
     } catch (e) {
         console.log(e);
         res.status(500).json({

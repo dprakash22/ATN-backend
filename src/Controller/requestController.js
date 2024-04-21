@@ -50,7 +50,8 @@ const requestController = async (req, res) => {
 };
 
 const requestOutput = async (req, res) => {
-    console.log("Deepa");
+    try {
+    } catch (e) {}
 };
 
 module.exports = { requestController };

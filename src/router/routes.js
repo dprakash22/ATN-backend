@@ -8,13 +8,15 @@ const { getUserDetails } = require("../Controller/loraController");
 
 const controllerApp = express.Router();
 
+// User routes
 controllerApp.post("/detail", userController);
 controllerApp.post("/login", loginpage);
 
+// Request Routes
 controllerApp.post("/newRequesting", requestController);
 controllerApp.get("/allRequests", requestOutput);
 
-controllerApp.post("/getUserDetails", getUserDetails)
-
+// LoRa Routes
+controllerApp.post("/getUserDetails", getUserDetails);
 
 module.exports = { controllerApp };

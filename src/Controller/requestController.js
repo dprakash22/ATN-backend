@@ -13,7 +13,7 @@ const updateRequestStatus = async () => {
         });
 
         for (const request of requestsToUpdate) {
-            request.status = "Completed";
+            request.status = "Expired..";
             await request.save();
         }
 

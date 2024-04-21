@@ -68,4 +68,5 @@ const requestOutput = async (req, res) => {
     }
 };
 
+//upto now all values can be get from this api
 module.exports = { requestController, requestOutput };

@@ -3,15 +3,24 @@ const cors = require("cors");
 const express = require("express");
 const { User, LoRa, Reqest } = require("./Models/models");
 const mongoose = require("mongoose");
+const {userControllerapp} = require("./router/routes.js");
 
 const app = express();
 app.use(bodyParser.json());
+
+
+app.use(cors());
+app.use(express.json())
+app.use('/user', userControllerapp);
+
+
 
 app.get("/try_msg", async (req, res) => {
     try {
         res.status(200).json({
             message: "Verified",
         });
+        console.log("joi")
     } catch (e) {
         console.log(e);
         res.status(500).json({
@@ -24,7 +33,7 @@ app.listen(8000, async () => {
     console.log("listening at 8000...");
     try {
         await mongoose.connect(
-            "mongodb+srv://dprakash22:Dprakash2004@cluster.uz0duh9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster"
+            "mongodb+srv://dprakash22:Dprakash2004@cluster.uz0duh9.mongodb.net/ATNprojectDB?retryWrites=true&w=majority&appName=Cluster"
         );
         console.log("connected to db");
     } catch (e) {

@@ -50,7 +50,7 @@ const requestController = async (req, res) => {
 
 const requestOutput = async (req, res) => {
     try {
-        console.log("Enter into try block of requestOutput");
+        console.log("Enter into try block of requestOutput 1 ");
 
         const requestPage = await Request.find({ status: { $ne: "Expired" } });
 
@@ -69,3 +69,5 @@ const requestOutput = async (req, res) => {
 
 //upto now all values can be get from this api
 module.exports = { requestController, requestOutput };
+
+//hello

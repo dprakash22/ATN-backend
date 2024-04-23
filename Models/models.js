@@ -20,6 +20,7 @@ const RequestSchema = new mongoose.Schema({
     data: { type: Object },
     status: { type: String },
     loraID: { type: String },
+    userId: { type: String },
     createdAt: { type: Date, default: Date.now },
 });
 

@@ -13,17 +13,14 @@ const UserSchema = new mongoose.Schema({
 const LoRaSchema = new mongoose.Schema({
     userId: { type: String },
     NoOfReq: { type: Number },
-<<<<<<< HEAD
     city: { type: String },
-=======
-    city:{type:String}
->>>>>>> 134df9faa5e4cd76c8a34af012ee4707e07b8cf2
 });
 
 const RequestSchema = new mongoose.Schema({
     data: { type: Object },
     status: { type: String },
     loraID: { type: String },
+    userId: { type: String },
     createdAt: { type: Date, default: Date.now },
 });
 

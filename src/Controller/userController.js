@@ -2,38 +2,26 @@ const {User} =require("../Models/models.js");
 const mongoose = require('mongoose')
 
 const userController=async(req,res)=>{
-
     try{
-    const userData = {
-        "password": req.body.password,
-        "confirmpassword": req.body.confirmpassword
-    }
-
-    if(userData.password==userData.confirmpassword){
         const a= await User.create({
             "fname":req.body.fname,
             "lname":req.body.lname,
             "email":req.body.email,
             "mobile":req.body.mobile,
-            "password":req.body.password,
+            "address":req.body.address,
+            "password":req.body.password
         })
         console.log(a)
         res.status(200).json({
             "status":"successfully created"
         })
-    }else{
-        console.log("give the correct password in both the fields")
-        res.status(500).json({
-            "status":"not created"
+        }catch(error){
+        console.log(error)
+        res.status(200).json({
+            "status":"failed to create",
+            "error":error
         })
-    }
-}catch(error){
-    console.log(error)
-    res.status(200).json({
-        "status":"failed to create",
-        "error":error
-    })
-}
+        }
 }
 
 

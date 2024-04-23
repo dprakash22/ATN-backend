@@ -1,4 +1,8 @@
-const { userController, loginpage } = require("../Controller/userController");
+const {
+    userController,
+    loginpage,
+    particularData,
+} = require("../Controller/userController");
 const {
     requestController,
     requestOutput,
@@ -11,6 +15,7 @@ const controllerApp = express.Router();
 // User routes
 controllerApp.post("/detail", userController);
 controllerApp.post("/login", loginpage);
+controllerApp.post("/allUsers", particularData);
 
 // Request Routes
 controllerApp.post("/newRequesting", requestController);

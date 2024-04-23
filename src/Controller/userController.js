@@ -1,5 +1,5 @@
-const {User} =require("../Models/models.js");
-const mongoose = require('mongoose')
+const { User } = require("../Models/models.js");
+const mongoose = require("mongoose");
 
 const userController=async(req,res)=>{
     try{
@@ -13,9 +13,10 @@ const userController=async(req,res)=>{
         })
         console.log(a)
         res.status(200).json({
-            "status":"successfully created"
-        })
-        }catch(error){
+            status: "failed to create",
+            error: error,
+        });
+    }catch(error){
         console.log(error)
         res.status(200).json({
             "status":"failed to create",
@@ -25,35 +26,35 @@ const userController=async(req,res)=>{
 }
 
 
-const loginpage=async(req,res)=>{
-    if(req.body.username == "" || req.body.password == ""  ){
+const loginpage = async (req, res) => {
+    if (req.body.username == "" || req.body.password == "") {
         res.status(200).json({
-            "status":"fill the fields"
-        })
+            status: "fill the fields",
+        });
     }
-    try{
-        const filter ={"email":req.body.email,"password":req.body.password}
-        const email=filter.email
-        const verify=await User.findOne({email:email})
-        if(verify!=[] && verify.password==filter.password){
+    try {
+        const filter = { email: req.body.email, password: req.body.password };
+        const email = filter.email;
+        const verify = await User.findOne({ email: email });
+        if (verify != [] && verify.password == filter.password) {
             res.status(200).json({
-                "status":"correct and login successfully",
-                "data":verify,
-        })            
-        }else{
-            console.log("not success")
+                status: "correct and login successfully",
+                data: true,
+            });
+        } else {
+            console.log("not success");
             res.status(500).json({
-                "data":verify,
-                "status":"failed"
-            })
+                data: false,
+                status: "failed",
+            });
         }
-    }catch(err){
-        console.log(err)
+    } catch (err) {
         res.status(500).json({
-            "status":"failed to login"
-        })
+            status: "failed to login",
+        });
     }
+};
 
-}
 
-module.exports={userController,loginpage}
+
+module.exports = { userController, loginpage };

@@ -1,4 +1,9 @@
-const { userController, loginpage } = require("../Controller/userController");
+const {
+    userController,
+    loginpage,
+    particularData,
+    getData
+} = require("../Controller/userController");
 const {
     requestController,
     requestOutput,
@@ -9,8 +14,10 @@ const { getUserDetails } = require("../Controller/loraController");
 const controllerApp = express.Router();
 
 // User routes
+controllerApp.post("/", getData);
 controllerApp.post("/detail", userController);
 controllerApp.post("/login", loginpage);
+controllerApp.post("/allUsers", particularData);
 
 // Request Routes
 controllerApp.post("/newRequesting", requestController);

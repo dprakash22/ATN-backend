@@ -55,6 +55,27 @@ const loginpage = async (req, res) => {
     }
 };
 
+const getData = async(req,res)=>{
+    try{
+        const x = req.body
+        console.log(x)
+        
+    }catch(err){
+        console.log(err)
+    }   
+}
 
+const particularData = async (req, res) => {
+    try {
+        const persons = await User.findById(req.body.userID);
 
-module.exports = { userController, loginpage };
+        res.status(200).json(persons);
+    } catch (err) {
+        res.status(500).json({
+            Message: "Some Error has Occured",
+            Error: err,
+        });
+    }
+};
+
+module.exports = { userController, loginpage, particularData,getData };

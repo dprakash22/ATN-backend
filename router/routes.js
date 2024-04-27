@@ -15,7 +15,7 @@ const { getUserDetails } = require("../Controller/loraController");
 const controllerApp = express.Router();
 
 // User routes
-controllerApp.post("/", getData);
+// controllerApp.post("loraSend", getData);
 controllerApp.post("/detail", userController);
 controllerApp.post("/login", loginpage);
 controllerApp.post("/allUsers", particularData);

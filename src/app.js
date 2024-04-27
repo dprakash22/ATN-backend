@@ -27,7 +27,9 @@ app.get("/try_msg", async (req, res) => {
     }
 });
 
-app.listen(8000,'172.16.126.92', async () => {
+
+//'172.16.126.92'
+app.listen(8000, async () => {
     console.log("listening at 8000...");
     try {
         await mongoose.connect(
@@ -36,6 +38,6 @@ app.listen(8000,'172.16.126.92', async () => {
         console.log("connected to db");
     } catch (e) {
         console.log(e);
-        console.log("coundn't establish connection....");
+        console.log("coundn't establish connection....")
     }
 });

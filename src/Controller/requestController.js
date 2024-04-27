@@ -30,9 +30,13 @@ const requestController = async (req, res) => {
     console.log("hellloo");
     try {
         const needHelp = await Request.create({
-            data: req.body.data,
+            // data: req.body.data,
+            data:{
+                "Food":req.body.f,
+                "Water":req.body.w
+            },
             status: "Not Completed",
-            loraID: req.body.loraID,
+            userId: req.body.id,
         });
 
         console.log(needHelp);

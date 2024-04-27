@@ -7,12 +7,8 @@ const { controllerApp } = require("./router/routes.js");
 
 const app = express();
 app.use(bodyParser.json());
-<<<<<<< HEAD
 app.use(express.text());
-=======
-app.use(express.text())
 
->>>>>>> 4e97787dee72138f11d149e4e10978c26709d055
 app.use(cors());
 app.use(express.json());
 app.use("/user", controllerApp);
@@ -31,14 +27,10 @@ app.get("/try_msg", async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
 //wifi D = 172.16.126.76
 //wifi A = " 172.16.121.254"
 
 app.listen(8000, async () => {
-=======
-app.listen(8000,'172.16.126.92', async () => {
->>>>>>> 4e97787dee72138f11d149e4e10978c26709d055
     console.log("listening at 8000...");
     try {
         await mongoose.connect(

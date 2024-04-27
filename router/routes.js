@@ -2,7 +2,7 @@ const {
     userController,
     loginpage,
     particularData,
-    getData
+    getData,
 } = require("../Controller/userController");
 const {
     requestController,

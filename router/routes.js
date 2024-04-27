@@ -21,7 +21,7 @@ controllerApp.post("/allUsers", particularData);
 // Request Routes
 controllerApp.post("/newRequesting", requestController);
 controllerApp.get("/allRequests", requestOutput);
-controllerApp.post("", getRequest);
+controllerApp.post("/loraSend", getRequest);
 
 // LoRa Routes
 controllerApp.post("/getUserDetails", getUserDetails);

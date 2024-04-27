@@ -26,7 +26,10 @@ app.get("/try_msg", async (req, res) => {
     }
 });
 
-app.listen(8000, "172.16.126.76", async () => {
+//wifi D = 172.16.126.76
+//wifi A = " 172.16.121.254"
+
+app.listen(8000, async () => {
     console.log("listening at 8000...");
     try {
         await mongoose.connect(

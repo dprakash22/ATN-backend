@@ -48,6 +48,11 @@ const requestController = async (req, res) => {
     }
 };
 
+const getRequest = async (req, res) => {
+    console.log(req.body);
+    res.send(200);
+};
+
 const requestOutput = async (req, res) => {
     try {
         console.log("Enter into try block of requestOutput 1 ");
@@ -68,6 +73,6 @@ const requestOutput = async (req, res) => {
 };
 
 //upto now all values can be get from this api
-module.exports = { requestController, requestOutput };
+module.exports = { requestController, requestOutput, getRequest };
 
 //hello

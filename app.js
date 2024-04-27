@@ -7,7 +7,7 @@ const { controllerApp } = require("./router/routes.js");
 
 const app = express();
 app.use(bodyParser.json());
-
+app.use(express.text());
 app.use(cors());
 app.use(express.json());
 app.use("/user", controllerApp);
@@ -26,7 +26,7 @@ app.get("/try_msg", async (req, res) => {
     }
 });
 
-app.listen(8000, async () => {
+app.listen(8000, "172.16.126.76", async () => {
     console.log("listening at 8000...");
     try {
         await mongoose.connect(

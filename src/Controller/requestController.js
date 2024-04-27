@@ -1,3 +1,4 @@
+const { json } = require("express");
 const { Request } = require("../Models/models.js");
 const cron = require("node-cron");
 
@@ -67,7 +68,56 @@ const requestOutput = async (req, res) => {
     }
 };
 
-//upto now all values can be get from this api
-module.exports = { requestController, requestOutput };
+const getRequest = async (req, res) => {
+    try {
+        console.log(req.body);
 
-//hello
+        const dataFromAPI = req.body;
+        // console.log(JSON.parse(dataFromAPI));
+        // // var
+        // // console.log(
+        // //     JSON.parse()
+        // // );
+
+        if (typeof dataFromAPI === "string") {
+            const loraID = dataFromAPI.slice(1, 7);
+            console.log("the lora ID " + loraID);
+            const jsonString = '"' + dataFromAPI.slice(7).trim();
+            console.log("json Data" + jsonString);
+
+            const jsonDatas = JSON.parse(jsonString);
+            const jsonData = JSON.parse(jsonDatas);
+            console.log(typeof jsonData);
+            // nedd to insert userID
+            const userId = jsonData.i;
+            const x = {};
+
+            console.log(jsonData.f, "----------------");
+            //  new instance of RequestSchema created
+            const requestInstance = new Request({
+                loraID: loraID,
+                userId: userId,
+                data: jsonData,
+            });
+
+            // Save the instance to the database
+            const savedRequest = await requestInstance.save();
+
+            console.log("Request saved:", savedRequest);
+            res.status(200).json({
+                data_send: req.body,
+                message: "Request saved successfully",
+            });
+        } else {
+            res.status(400).json({ message: "Invalid data format" });
+        }
+    } catch (error) {
+        console.error("Error Occurred:", error);
+        res.status(500).json({
+            message: "Error saving request",
+            " Error": error,
+        });
+    }
+};
+
+module.exports = { requestController, requestOutput, getRequest };

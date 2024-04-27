@@ -6,6 +6,7 @@ const {
 const {
     requestController,
     requestOutput,
+    getRequest,
 } = require("../Controller/requestController");
 const express = require("express");
 const { getUserDetails } = require("../Controller/loraController");
@@ -20,6 +21,7 @@ controllerApp.post("/allUsers", particularData);
 // Request Routes
 controllerApp.post("/newRequesting", requestController);
 controllerApp.get("/allRequests", requestOutput);
+controllerApp.post("/loraSend", getRequest);
 
 // LoRa Routes
 controllerApp.post("/getUserDetails", getUserDetails);

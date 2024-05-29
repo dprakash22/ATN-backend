@@ -68,36 +68,87 @@ const requestOutput = async (req, res) => {
     }
 };
 
+// const getRequest = async (req, res) => {
+//     try {
+//         console.log(req.body);
+
+//         const dataFromAPI = req.body;
+//         // console.log(JSON.parse(dataFromAPI));
+//         // // var
+//         // // console.log(
+//         // //     JSON.parse()
+//         // // );
+
+//         if (typeof dataFromAPI === "string") {
+//             const loraID = dataFromAPI.slice(1, 8);
+//             console.log("the lora ID " + loraID);
+//             const jsonString = '"' + dataFromAPI.slice(8).trim();
+//             console.log("json Data" + jsonString);
+
+//             const jsonDatas = JSON.parse(jsonString);
+//             const jsonData = JSON.parse(jsonDatas);
+//             console.log(typeof jsonData);
+//             // nedd to insert userID
+//             const userId = jsonData.i;
+
+//             console.log(jsonData.f, "----------------");
+//             //  new instance of RequestSchema created
+//             const requestInstance = new Request({
+//                 loraID: loraID,
+//                 userID: userId,
+//                 data: jsonData,
+//                 status:"Not Completed"
+//             });
+
+//             // Save the instance to the database
+//             const savedRequest = await requestInstance.save();
+
+//             console.log("Request saved:", savedRequest);
+//             res.status(200).json({
+//                 data_send: req.body,
+//                 message: "Request saved successfully",
+//             });
+//         } else {
+//             res.status(400).json({ message: "Invalid data format" });
+//         }
+//     } catch (error) {
+//         console.error("Error Occurred:", error);
+//         res.status(500).json({
+//             message: "Error saving request",
+//             " Error": error,
+//         });
+//     }
+// };
+
 const getRequest = async (req, res) => {
     try {
         console.log(req.body);
 
         const dataFromAPI = req.body;
-        // console.log(JSON.parse(dataFromAPI));
-        // // var
-        // // console.log(
-        // //     JSON.parse()
-        // // );
 
         if (typeof dataFromAPI === "string") {
-            const loraID = dataFromAPI.slice(1, 7);
-            console.log("the lora ID " + loraID);
-            const jsonString = '"' + dataFromAPI.slice(7).trim();
-            console.log("json Data" + jsonString);
+            // Extract the LoRa ID
+            const loraID = dataFromAPI.slice(1, 8);
+            console.log("The LoRa ID: " + loraID);
 
-            const jsonDatas = JSON.parse(jsonString);
-            const jsonData = JSON.parse(jsonDatas);
-            console.log(typeof jsonData);
-            // nedd to insert userID
+            // Extract the JSON data and remove escape sequences
+            const jsonString = dataFromAPI.slice(8).replace(/\\"/g, '"');
+            console.log("JSON Data: " + jsonString);
+
+            // Parse the JSON data
+            const jsonData = JSON.parse(jsonString);
+
+            // Extract the user ID
             const userId = jsonData.i;
-            const x = {};
 
-            console.log(jsonData.f, "----------------");
-            //  new instance of RequestSchema created
+            console.log("User ID: " + userId);
+
+            // Create a new instance of RequestSchema with the extracted data
             const requestInstance = new Request({
                 loraID: loraID,
-                userId: userId,
+                userID: userId,
                 data: jsonData,
+                status: "Not Completed"
             });
 
             // Save the instance to the database
@@ -105,7 +156,7 @@ const getRequest = async (req, res) => {
 
             console.log("Request saved:", savedRequest);
             res.status(200).json({
-                data_send: req.body,
+                data_sent: req.body,
                 message: "Request saved successfully",
             });
         } else {
@@ -115,9 +166,10 @@ const getRequest = async (req, res) => {
         console.error("Error Occurred:", error);
         res.status(500).json({
             message: "Error saving request",
-            " Error": error,
+            error: error,
         });
     }
 };
+
 
 module.exports = { requestController, requestOutput, getRequest };

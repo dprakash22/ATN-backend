@@ -28,7 +28,7 @@ app.get("/try_msg", async (req, res) => {
 
 //wifi D = 172.16.126.76
 //wifi A = " 172.16.121.254"
-
+// guhanWIFI =  "192.168.112.1"
 app.listen(8000, async () => {
     console.log("listening at 8000...");
     try {

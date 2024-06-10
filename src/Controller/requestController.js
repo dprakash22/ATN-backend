@@ -1,6 +1,7 @@
 const { json } = require("express");
 const { Request } = require("../Models/models.js");
 const cron = require("node-cron");
+const {getOTA} = require('./OTAcontroller.js')
 
 // here only cron implementation started
 
@@ -54,10 +55,13 @@ const requestOutput = async (req, res) => {
         console.log("Enter into try block of requestOutput 1 ");
 
         const requestPage = await Request.find({ status: { $ne: "Expired" } });
-
+        const ota =  await getOTA()
         res.status(200).json({
             Message: "Successfully the required data has been displayed",
             data: requestPage,
+            OTA: {
+                version : ota.version
+            }
         });
     } catch (e) {
         console.log("Entered into error block ......");

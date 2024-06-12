@@ -43,7 +43,7 @@ app.get("/try_msg", async (req, res) => {
 //     }
 // });
 
-app.listen(5000,async () => {
+app.listen(5000,'0.0.0.0',async () => {
     console.log("listening at 5000...");
     try {
         await mongoose.connect(

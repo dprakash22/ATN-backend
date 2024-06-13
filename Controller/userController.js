@@ -36,7 +36,8 @@ const userController = async (req, res) => {
 };
 
 const loginpage = async (req, res) => {
-    if (req.body.username == "" || req.body.password == "") {
+    console.log(req.body)
+    if (req.body.email == "" || req.body.password == "") {
         res.status(200).json({
             status: "fill the fields",
         });

@@ -47,6 +47,7 @@ const loginpage = async (req, res) => {
         const filter = { email: req.body.email, password: req.body.password };
         const email = filter.email;
         const verify = await User.findOne({ email: email });
+        console.log(verify);
         if (verify != [] && verify.password == filter.password) {
             res.status(200).json({
                 status: "correct and login successfully",

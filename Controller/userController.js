@@ -63,7 +63,7 @@ const loginpage = async (req, res) => {
     } catch (err) {
         console.log(err);
         res.status(500).json({
-            status: "failed to login",
+            status: "Give correct email and password.",
         });
     }
 };

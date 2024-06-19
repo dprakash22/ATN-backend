@@ -92,7 +92,17 @@ const getRequest = async (req, res) => {
             const jsonDatas = JSON.parse(jsonString);
             const jsonData = JSON.parse(jsonDatas);
             console.log(typeof jsonData);
-            // nedd to insert userID
+
+            if(jsonData["0"]){
+                let completemsg = await Request.find({
+                    _id:jsonData['0']
+                })
+                completemsg.status="Completed"
+                await completemsg.save()
+            }
+
+            // need to insert userID
+            else{
             const userId = jsonData.i;
             const x = {};
 
@@ -112,7 +122,7 @@ const getRequest = async (req, res) => {
                 data_send: req.body,
                 message: "Request saved successfully",
             });
-        } else {
+        }} else {
             res.status(400).json({ message: "Invalid data format" });
         }
     } catch (error) {

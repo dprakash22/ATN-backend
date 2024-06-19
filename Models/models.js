@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+// const module = require('module')
 
-const UserSchema = new mongoose.Schema({ 
+const UserSchema = new mongoose.Schema({
     fname: { type: String },
     lname: { type: String },
     email: { type: String },
@@ -23,8 +24,14 @@ const RequestSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
 });
 
+const OTAschema = new mongoose.Schema({
+    version : { type: String},
+    code : { type : String }
+})
+
 const User = mongoose.model("User", UserSchema);
 const LoRa = mongoose.model("LoRa", LoRaSchema);
 const Request = mongoose.model("Request", RequestSchema);
+const OTA = mongoose.model('OTA',OTAschema);
 
-module.exports = { User, LoRa, Request };
+module.exports = { User, LoRa, Request, OTA};

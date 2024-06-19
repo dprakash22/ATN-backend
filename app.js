@@ -7,7 +7,7 @@ const { controllerApp } = require("./router/routes.js");
 
 const app = express();
 app.use(bodyParser.json());
-app.use(express.text())
+app.use(express.text());
 
 app.use(cors());
 app.use(express.json());
@@ -27,10 +27,24 @@ app.get("/try_msg", async (req, res) => {
     }
 });
 
+//wifi D = 172.16.126.76
+//wifi A = " 172.16.121.254"
 
-//'172.16.126.92'
-app.listen(8000, async () => {
-    console.log("listening at 8000...");
+// app.listen(5000,'192.168.205.47', async () => {
+//     console.log("listening at 5000...");
+//     try {
+//         await mongoose.connect(
+//             "mongodb+srv://dprakash22:Dprakash2004@cluster.uz0duh9.mongodb.net/ATNprojectDB?retryWrites=true&w=majority&appName=Cluster"
+//         );
+//         console.log("connected to db");
+//     } catch (e) {
+//         console.log(e);
+//         console.log("coundn't establish connection....");
+//     }
+// });
+
+app.listen(5000,'0.0.0.0',async () => {
+    console.log("listening at 5000...");
     try {
         await mongoose.connect(
             "mongodb+srv://dprakash22:Dprakash2004@cluster.uz0duh9.mongodb.net/ATNprojectDB?retryWrites=true&w=majority&appName=Cluster"
@@ -38,6 +52,6 @@ app.listen(8000, async () => {
         console.log("connected to db");
     } catch (e) {
         console.log(e);
-        console.log("coundn't establish connection....")
+        console.log("coundn't establish connection....");
     }
 });

@@ -137,6 +137,7 @@ const getRequest = async (req, res) => {
         console.log("Incoming data:", req.body);
 
         const dataFromAPI = req.body;
+        console.log(dataFromAPI);
         console.log(dataFromAPI.charAt(1))
 
         // Check if the data from API is a string and has the expected format

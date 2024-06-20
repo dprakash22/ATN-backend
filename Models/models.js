@@ -10,6 +10,14 @@ const UserSchema = new mongoose.Schema({
     address: { type: String },
 });
 
+const SensorSchema = new mongoose.Schema({
+    type: { type: String },
+    data: { type: Object },
+    date: { type: Date },
+    latitude: {type:String},
+    longitude: {type:String},
+});
+
 const LoRaSchema = new mongoose.Schema({
     userId: { type: String },
     NoOfReq: { type: Number },
@@ -33,5 +41,7 @@ const User = mongoose.model("User", UserSchema);
 const LoRa = mongoose.model("LoRa", LoRaSchema);
 const Request = mongoose.model("Request", RequestSchema);
 const OTA = mongoose.model('OTA',OTAschema);
+const Sensor = mongoose.model('Sensor',SensorSchema);
 
-module.exports = { User, LoRa, Request, OTA};
+module.exports = { User, LoRa, Request, OTA, Sensor};
+

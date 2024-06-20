@@ -1,7 +1,8 @@
 const { json } = require("express");
-const { Request } = require("../Models/models.js");
+const { Request, Sensor } = require("../Models/models.js");
 const cron = require("node-cron");
 const {getOTA} = require('./OTAcontroller.js')
+const moment = require('moment');
 
 // here only cron implementation started
 
@@ -134,4 +135,64 @@ const getRequest = async (req, res) => {
     }
 };
 
-module.exports = { requestController, requestOutput, getRequest };
+const getSensorData = async (req, res) => {
+    try {
+        var sensordata = req.body;
+
+        const id = sensordata[0];
+        const datestring = sensordata.slice(2, 16);
+        console.log(datestring)
+        const parseDate = moment(datestring, 'YY-MM-DD HH:mm').toDate();
+
+        const lat = sensordata.slice(16, 23);
+        const lon = sensordata.slice(24, 31);
+
+        sensordata=sensordata.slice(31)
+        console.log(sensordata,"my data is here")
+
+        let dataJson = {};
+        
+        try {
+            const arr = sensordata.split(" ");  // Fixed variable name
+            if (id == "5") {
+                dataJson['temperature'] = arr[0];
+                dataJson['pressure'] = arr[1];
+                dataJson['humidity'] = arr[2];
+            } else if (id == "2") {
+                dataJson['temperature'] = arr[0];
+                dataJson['lightIntensity'] = arr[1];
+            } else if (id == "4") {
+                dataJson['temperature'] = arr[0];
+            } else {
+                return res.status(500).json({'message': 'Invalid sensor id'});
+            }
+            console.log(typeof parseDate)
+            const sensorInstance = new Sensor({
+                'type':id,
+                'data':dataJson,
+                'date':parseDate.toString(),
+                'latitude':lat.trim(),
+                'longitude':lon.trim(),
+            });
+            
+            const finalData = await sensorInstance.save()
+
+            console.log('Data saved ',finalData)
+
+            res.status(200).json({
+                message: 'Sensor data processed successfully',
+            });
+        }catch(e){
+            console.log(e);
+            res.status(500).json({'message':'Error parsing sensor Data','error':e.toString()})
+        }
+    }
+    catch(e){
+        console.log(e);
+        res.status(500).json({
+            "message":"error in collecting data"
+        })
+    }
+}
+
+module.exports = { requestController, requestOutput, getRequest, getSensorData };

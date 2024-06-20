@@ -105,14 +105,12 @@ const getRequest = async (req, res) => {
 
             // need to insert userID
             else{
-            const userId = jsonData.i;
-            const x = {};
 
-            console.log(jsonData.f, "----------------");
+            console.log(jsonData['1'], "----------------");
             //  new instance of RequestSchema created
             const requestInstance = new Request({
                 loraID: loraID,
-                userId: userId,
+                userId: "66240a34aad17cb72cc5db50",
                 data: jsonData,
             });
 

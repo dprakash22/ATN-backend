@@ -84,13 +84,15 @@ const getRequest = async (req, res) => {
         // // );
 
         if (typeof dataFromAPI === "string") {
-            const loraID = dataFromAPI.slice(1, 7);
+            const loraID = dataFromAPI.slice(0,1);
             console.log("the lora ID " + loraID);
-            const jsonString = '"' + dataFromAPI.slice(7).trim();
-            console.log("json Data" + jsonString);
+            const jsonString1 = dataFromAPI.slice(1);
+            const jsonString= jsonString1.replace(/\\"/g, '"');
 
-            const jsonDatas = JSON.parse(jsonString);
-            const jsonData = JSON.parse(jsonDatas);
+            const jsonData = JSON.parse(jsonString);
+            console.log("json Data " + typeof jsonString);
+
+            // const jsonData = JSON.parse(jsonDatas);
             console.log(typeof jsonData);
 
             if(jsonData["0"]){

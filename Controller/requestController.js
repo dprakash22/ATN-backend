@@ -110,7 +110,7 @@ const getRequest = async (req, res) => {
             //  new instance of RequestSchema created
             const requestInstance = new Request({
                 loraID: loraID,
-                userId: "66240a34aad17cb72cc5db50",
+                userId: "662c8b556b4dc3e02ba28106",
                 data: jsonData,
             });
 

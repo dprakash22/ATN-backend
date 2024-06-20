@@ -8,7 +8,8 @@ const {
     requestController,
     requestOutput,
     getRequest,
-    getSensorData
+    getSensorData,
+    sendToQGIS
 } = require("../Controller/requestController");
 const {
     getOTAcode,
@@ -30,6 +31,7 @@ controllerApp.post("/newRequesting", requestController);
 controllerApp.get("/allRequests", requestOutput);
 controllerApp.post("/lorasend", getRequest);
 controllerApp.post("/lorasensor",getSensorData);
+controllerApp.get("/sensorqgis",sendToQGIS)
 
 // LoRa Routes
 controllerApp.post("/getUserDetails", getUserDetails);

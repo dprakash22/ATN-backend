@@ -195,4 +195,50 @@ const getSensorData = async (req, res) => {
     }
 }
 
-module.exports = { requestController, requestOutput, getRequest, getSensorData };
+const sendToQGIS = async(req,res)=>{
+    try{
+        console.log('in send to QGIS...');
+
+        const recentEntries = await Sensor.aggregate([
+            // Sort by type and date in descending order
+            { $sort: { type: 1, date: -1 } },
+            // Group by type and get the first document in each group
+            {
+                $group: {
+                    _id: "$type",
+                    type: { $first: "$type" },
+                    data: { $first: "$data" },
+                    date: { $first: "$date" }
+                }
+            },
+            // Optionally, sort the result by type
+            { $sort: { type: 1 } }
+        ]);
+
+        let status = {}
+
+        recentEntries.forEach((val)=>{
+            const specificDate = moment(val.date);
+
+            // Get the current date
+            const currentDate = moment();
+
+            // Calculate the difference in minutes
+            const differenceInMinutes = currentDate.diff(specificDate, 'minutes');
+            if(differenceInMinutes >1){
+                status[val.type] = 0
+            }else{
+                status[val.type] = 1
+            }
+
+            console.log(differenceInMinutes,'  asdfafdadfafdsafds   ')
+        })
+        console.log('Recent entries:', recentEntries);
+        return res.status(200).json({'message':"data sent sccussfully",'data':status});
+        // 5 2 4
+    }catch(e){
+        console.log(e)
+    }
+}
+
+module.exports = { requestController, requestOutput, getRequest, getSensorData ,sendToQGIS};

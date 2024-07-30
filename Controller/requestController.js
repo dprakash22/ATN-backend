@@ -2,7 +2,8 @@ const { json } = require("express");
 const { Request, Sensor } = require("../Models/models.js");
 const cron = require("node-cron");
 const {getOTA} = require('./OTAcontroller.js')
-const moment = require('moment');
+const moment = require('moment-timezone');
+
 
 // here only cron implementation started
 
@@ -75,7 +76,7 @@ const requestOutput = async (req, res) => {
 
 const getRequest = async (req, res) => {
     try {
-        console.log(req.body);
+        console.log(req.body,'-----------');
 
         const dataFromAPI = req.body;
         // console.log(JSON.parse(dataFromAPI));
@@ -87,7 +88,7 @@ const getRequest = async (req, res) => {
         if (typeof dataFromAPI === "string") {
             const loraID = dataFromAPI.slice(0,1);
             console.log("the lora ID " + loraID);
-            const jsonString1 = dataFromAPI.slice(1);
+            const jsonString1 = dataFromAPI.slice(2);
             const jsonString= jsonString1.replace(/\\"/g, '"');
 
             const jsonData = JSON.parse(jsonString);
@@ -137,72 +138,78 @@ const getRequest = async (req, res) => {
 
 const getSensorData = async (req, res) => {
     try {
-        var sensordata = req.body;
+        // Extract the sensor data from the request body
+        const sensordata = req.body;
 
-        const id = sensordata[0];
-        const datestring = sensordata.slice(2, 16);
-        console.log(datestring)
-        const parseDate = moment(datestring, 'YY-MM-DD HH:mm').toDate();
-
-        const lat = sensordata.slice(16, 23);
-        const lon = sensordata.slice(24, 31);
-
-        sensordata=sensordata.slice(31)
-        console.log(sensordata,"my data is here")
-
-        let dataJson = {};
-        
-        try {
-            const arr = sensordata.split(" ");  // Fixed variable name
-            if (id == "5") {
-                dataJson['temperature'] = arr[0];
-                dataJson['pressure'] = arr[1];
-                dataJson['humidity'] = arr[2];
-            } else if (id == "2") {
-                dataJson['temperature'] = arr[0];
-                dataJson['lightIntensity'] = arr[1];
-            } else if (id == "4") {
-                dataJson['temperature'] = arr[0];
-            } else {
-                return res.status(500).json({'message': 'Invalid sensor id'});
-            }
-            console.log(typeof parseDate)
-            const sensorInstance = new Sensor({
-                'type':id,
-                'data':dataJson,
-                'date':parseDate.toString(),
-                'latitude':lat.trim(),
-                'longitude':lon.trim(),
-            });
-            
-            const finalData = await sensorInstance.save()
-
-            console.log('Data saved ',finalData)
-
-            res.status(200).json({
-                message: 'Sensor data processed successfully',
-            });
-        }catch(e){
-            console.log(e);
-            res.status(500).json({'message':'Error parsing sensor Data','error':e.toString()})
+        // Ensure data is a string
+        if (typeof sensordata !== 'string') {
+            return res.status(400).json({'message': 'Invalid sensor data format'});
         }
-    }
-    catch(e){
+
+        // Split the data string by spaces
+        const dataParts = sensordata.split(' ');
+
+        // Extract data
+        const id = dataParts[0];
+        const dateStr = dataParts.slice(1, 3).join(' '); // Combine date and time
+        const lat = dataParts[3];
+        const lon = dataParts[4];
+        const readings = dataParts.slice(5); // Remaining sensor readings
+
+        // Parse the date string
+        const parseDate = moment(dateStr, 'YY-MM-DD HH:mm').tz('Asia/Kolkata', true).toDate();
+        console.log(dateStr);
+        console.log(typeof(dateStr));
+        console.log(parseDate);
+        console.log(typeof(parseDate));
+
+
+        // Build data JSON based on sensor ID
+        let dataJson = {};
+        if (id === "5") {
+            dataJson['temperature'] = readings[0];
+            dataJson['pressure'] = readings[1];
+            dataJson['humidity'] = readings[2];
+        } else if (id === "2") {
+            dataJson['temperature'] = readings[0];
+            dataJson['lightIntensity'] = readings[1];
+        } else if (id === "4") {
+            dataJson['temperature'] = readings[0];
+        } else {
+            return res.status(400).json({'message': 'Invalid sensor id'});
+        }
+
+        // Create a new Sensor instance
+        const sensorInstance = new Sensor({
+            'type': id,
+            'data': dataJson,
+            'date': moment(parseDate).toISOString(), // Save in ISO format
+            'latitude': lat,
+            'longitude': lon,
+        });
+
+        // Save the instance to the database
+        const finalData = await sensorInstance.save();
+
+        console.log('Data saved ', finalData);
+
+        res.status(200).json({
+            message: 'Sensor data processed successfully',
+        });
+    } catch (e) {
         console.log(e);
-        res.status(500).json({
-            "message":"error in collecting data"
-        })
+        res.status(500).json({'message': 'Error processing sensor data', 'error': e.toString()});
     }
-}
+};
 
-const sendToQGIS = async(req,res)=>{
-    try{
-        console.log('in send to QGIS...');
 
+const sendToQGIS = async (req, res) => {
+    try {
+        console.log('In send to QGIS...');
+
+        // Retrieve recent sensor entries from the database
         const recentEntries = await Sensor.aggregate([
-            // Sort by type and date in descending order
             { $sort: { type: 1, date: -1 } },
-            // Group by type and get the first document in each group
             {
                 $group: {
                     _id: "$type",
@@ -211,34 +218,40 @@ const sendToQGIS = async(req,res)=>{
                     date: { $first: "$date" }
                 }
             },
-            // Optionally, sort the result by type
             { $sort: { type: 1 } }
         ]);
 
-        let status = {}
+        let status = {};
 
-        recentEntries.forEach((val)=>{
-            const specificDate = moment(val.date);
+        // Process each entry
+        recentEntries.forEach((val) => {
+            // Convert the date field from the database to a moment object in UTC
+            const specificDate = moment.utc(val.date);
+            // Get the current date in UTC
+            const currentDate = moment.utc();
 
-            // Get the current date
-            const currentDate = moment();
+            console.log(specificDate.toISOString(), " ", currentDate.toISOString());
 
             // Calculate the difference in minutes
             const differenceInMinutes = currentDate.diff(specificDate, 'minutes');
-            if(differenceInMinutes >1){
-                status[val.type] = 0
-            }else{
-                status[val.type] = 1
+
+            // Determine status based on time difference in minutes
+            if (differenceInMinutes >= 1) { // 60 minutes = 1 hour
+                status[val.type] = 0;
+            } else {
+                status[val.type] = 1;
             }
 
-            console.log(differenceInMinutes,'  asdfafdadfafdsafds   ')
-        })
+            console.log(`${val.type}: ${differenceInMinutes} minutes ago, status: ${status[val.type]}`);
+        });
+
         console.log('Recent entries:', recentEntries);
-        return res.status(200).json({'message':"data sent sccussfully",'data':status});
-        // 5 2 4
-    }catch(e){
-        console.log(e)
+        return res.status(200).json({ 'message': "Data sent successfully", 'data': status });
+    } catch (e) {
+        console.error('Error in sendToQGIS:', e);
+        return res.status(500).json({ 'message': 'Internal server error' });
     }
-}
+};
+
 
 module.exports = { requestController, requestOutput, getRequest, getSensorData ,sendToQGIS};

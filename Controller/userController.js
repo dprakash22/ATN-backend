@@ -8,6 +8,8 @@ const userController = async (req, res) => {
             confirmpassword: req.body.confirmpassword,
         };
 
+        const userCount = await User.countDocuments();
+
         if (userData.password == userData.confirmpassword) {
             const a = await User.create({
                 fname: req.body.fname,
@@ -15,6 +17,7 @@ const userController = async (req, res) => {
                 email: req.body.email,
                 mobile: req.body.mobile,
                 password: req.body.password,
+                uid:userCount+1,
             });
             console.log(a);
             res.status(200).json({

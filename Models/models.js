@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema({
     mobile: { type: String },
     password: { type: String },
     address: { type: String },
+    uid:{type: String},
 });
 
 const SensorSchema = new mongoose.Schema({
@@ -28,7 +29,7 @@ const RequestSchema = new mongoose.Schema({
     data: { type: Object },
     status: { type: String },
     loraID: { type: String },
-    userId: { type: String },
+    uid:{type: String},
     createdAt: { type: Date, default: Date.now },
 });
 
